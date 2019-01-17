@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<canvas id="canvas1" width="600" height="500" style="border:1px solid #000;cursor: crosshair;"></canvas>
+
+<button id="clear">Clear Canvas</button>
+<button onclick="startAutoPlotting()">Start Auto Plotting</button>
+<button onclick="stopAutoPlotting()">Stop Auto Plotting</button>
+<script>
+var c = document.getElementById("canvas1");
+var ctx = c.getContext("2d");
+var myVar;
+var f = true;
+ctx.beginPath();
+
+
+function drawStroke(x,y){
+	if(f){
+		ctx.moveTo(x, y);
+		f = false;
+	}else{
+		ctx.lineTo(x, y);
+	}
+	ctx.stroke();
+}
+
+function randomNumberY(min,max){
+	return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function randomNumberX(){
+	var ts = Math.round((new Date()).getTime() / 1000);
+	ts = ts.toString();
+	ts = ts.slice(-2);
+	return ts;
+}
+
+function getXY(){
+	drawStroke(randomNumberX(),randomNumberY(80,100));
+}
+
+function startAutoPlotting(){
+	myVar = setInterval(getXY,1000);
+}
+
+function stopAutoPlotting() {
+  clearInterval(myVar);
+}
+
+c.addEventListener('click', function (event) {
+	ctx.lineTo((event.x - this.offsetLeft), (event.y - this.offsetTop));
+	ctx.stroke();
+
+    
+});
+
+document.getElementById('clear').addEventListener('click', function() {
+        ctx.clearRect(0, 0, c.width, c.height);
+      }, false);
+
+</script>
+
+
+</body>
+</html>
